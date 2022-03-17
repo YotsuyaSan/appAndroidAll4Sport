@@ -2,7 +2,7 @@ const database = require("../database");
 const Sequelize = require("sequelize");
 
 async function isUserGood(username, password) {
-  const json = [];
+  var token = null;
   await database.db.database
     .query(
       "SELECT id FROM users WHERE us_login = :username AND us_mdp = :password",
@@ -17,11 +17,13 @@ async function isUserGood(username, password) {
     .then((res) => {
       if (res.length == 1) {
         res.forEach((element) => {
-          json.push(element);
+          token = element.id;
         });
+      } else {
+        return token;
       }
     });
-  return json;
+  return token;
 }
 
 module.exports = {
